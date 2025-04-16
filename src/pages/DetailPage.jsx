@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Search, ShoppingCart, Menu, X, Heart, User, ChevronDown, ChevronRight, ChevronUp, Filter, SlidersHorizontal, Check } from 'lucide-react';
+import { ChevronDown, ChevronUp, Filter } from 'lucide-react';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 // Data mẫu
 const categoryData = {
@@ -46,9 +48,8 @@ const categories = [
 
 export default function CategoryPage() {
   // State
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [hoveredCategory, setHoveredCategory] = useState(null);
   const [sortOption, setSortOption] = useState('featured');
   const [viewMode, setViewMode] = useState('grid');
   const [currentPage, setCurrentPage] = useState(1);
@@ -207,202 +208,7 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top bar */}
-      <div className="bg-gray-900 text-white py-2">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <div className="text-sm">
-            <span className="mr-4">Hotline: 1800 1234</span>
-            <span>Email: support@electroshop.com</span>
-          </div>
-          <div className="text-sm">
-            <a href="#" className="mr-4">Tra cứu đơn hàng</a>
-            <a href="#">Hệ thống cửa hàng</a>
-          </div>
-        </div>
-      </div>
-
-      {/* Header */}
-      <header className="bg-white shadow-md sticky top-0 z-30">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
-            <div className="flex items-center">
-              <button className="mr-2 md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-              <a href="/">
-                <h1 className="text-2xl font-bold text-blue-600">ElectroShop</h1>
-              </a>
-            </div>
-            <div className="hidden md:flex flex-grow mx-8 relative">
-              <input type="text" placeholder="Tìm kiếm sản phẩm..." className="w-full py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-              <button className="bg-blue-600 text-white p-2 rounded-r-md hover:bg-blue-700">
-                <Search size={20} />
-              </button>
-            </div>
-            <div className="flex items-center space-x-4">
-              <a href="#" className="hidden md:flex items-center text-gray-700 hover:text-blue-600">
-                <User size={20} className="mr-1" /> Tài khoản
-              </a>
-              <a href="#" className="hidden md:flex items-center text-gray-700 hover:text-blue-600">
-                <Heart size={20} className="mr-1" /> Yêu thích
-              </a>
-              <a href="#" className="flex items-center text-gray-700 hover:text-blue-600 relative">
-                <ShoppingCart size={20} className="mr-1" />
-                <span className="hidden md:inline">Giỏ hàng</span>
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
-              </a>
-            </div>
-          </div>
-          <div className="md:hidden pb-4">
-            <div className="flex relative">
-              <input type="text" placeholder="Tìm kiếm sản phẩm..." className="w-full py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none" />
-              <button className="bg-blue-600 text-white p-2 rounded-r-md">
-                <Search size={20} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setMobileMenuOpen(false)}>
-          <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-xl p-4 z-50" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Menu</h2>
-              <button onClick={() => setMobileMenuOpen(false)}>
-                <X size={24} />
-              </button>
-            </div>
-            <div className="space-y-1">
-              <a href="#" className="block py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md">Tài khoản</a>
-              <a href="#" className="block py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md">Yêu thích</a>
-              <div className="border-t my-2"></div>
-              {categories.map(category => (
-                <a key={category.id} href="#" className="block py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md">
-                  {category.name}
-                </a>
-              ))}
-              <div className="border-t my-2"></div>
-              <a href="#" className="block py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md">Khuyến mãi</a>
-              <a href="#" className="block py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md">Tin tức</a>
-              <a href="#" className="block py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md">Liên hệ</a>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Mobile filters */}
-      {mobileFiltersOpen && (
-        <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setMobileFiltersOpen(false)}>
-          <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-xl p-4 z-50 overflow-y-auto" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Bộ lọc</h2>
-              <button onClick={() => setMobileFiltersOpen(false)}>
-                <X size={24} />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <div className="pb-2">
-                <button onClick={clearAllFilters} className="text-blue-600 text-sm font-medium hover:underline">
-                  Xóa tất cả bộ lọc
-                </button>
-              </div>
-              <div className="border-t pt-4">
-                <div className="flex items-center mb-2">
-                  <input type="checkbox" id="mobile-inStock" checked={inStockOnly} onChange={handleInStockChange} className="h-4 w-4 text-blue-600 rounded" />
-                  <label htmlFor="mobile-inStock" className="ml-2 text-gray-700">Còn hàng</label>
-                </div>
-              </div>
-              <div className="border-t pt-4">
-                <div className="flex justify-between items-center cursor-pointer mb-2" onClick={() => toggleFilterSection('price')}>
-                  <h3 className="font-medium">Giá</h3>
-                  {openFilterSection.price ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </div>
-                {openFilterSection.price && (
-                  <div className="space-y-2 mt-2 ml-1">
-                    {categoryData.priceRanges.map(range => (
-                      <div key={range.id} className="flex items-center">
-                        <input type="checkbox" id={`mobile-price-${range.id}`} checked={selectedPriceRanges.includes(range.id)} onChange={() => handlePriceChange(range.id)} className="h-4 w-4 text-blue-600 rounded" />
-                        <label htmlFor={`mobile-price-${range.id}`} className="ml-2 text-gray-700">{range.name}</label>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className="border-t pt-4">
-                <div className="flex justify-between items-center cursor-pointer mb-2" onClick={() => toggleFilterSection('brand')}>
-                  <h3 className="font-medium">Thương hiệu</h3>
-                  {openFilterSection.brand ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </div>
-                {openFilterSection.brand && (
-                  <div className="space-y-2 mt-2 ml-1">
-                    {categoryData.brands.map(brand => (
-                      <div key={brand} className="flex items-center">
-                        <input type="checkbox" id={`mobile-brand-${brand}`} checked={selectedBrands.includes(brand)} onChange={() => handleBrandChange(brand)} className="h-4 w-4 text-blue-600 rounded" />
-                        <label htmlFor={`mobile-brand-${brand}`} className="ml-2 text-gray-700">{brand}</label>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              {categoryData.features.map(feature => (
-                <div key={feature.id} className="border-t pt-4">
-                  <div className="flex justify-between items-center cursor-pointer mb-2" onClick={() => toggleFeatureSection(feature.id)}>
-                    <h3 className="font-medium">{feature.name}</h3>
-                    {openFilterSection.features[feature.id] ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                  </div>
-                  {openFilterSection.features[feature.id] && (
-                    <div className="space-y-2 mt-2 ml-1">
-                      {feature.options.map((option, idx) => (
-                        <div key={idx} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id={`mobile-feature-${feature.id}-${idx}`}
-                            checked={selectedFeatures[feature.id]?.includes(option) || false}
-                            onChange={() => handleFeatureChange(feature.id, option)}
-                            className="h-4 w-4 text-blue-600 rounded"
-                          />
-                          <label htmlFor={`mobile-feature-${feature.id}-${idx}`} className="ml-2 text-gray-700">{option}</label>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-              <div className="border-t pt-4 pb-4">
-                <button onClick={() => setMobileFiltersOpen(false)} className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
-                  Áp dụng
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm">
-        <div className="container mx-auto px-4">
-          <div className="hidden md:flex items-center space-x-8 py-3">
-            {categories.map(category => (
-              <div key={category.id} className="relative group" onMouseEnter={() => setHoveredCategory(category.id)} onMouseLeave={() => setHoveredCategory(null)}>
-                <a href="#" className={`flex items-center ${category.id === categoryData.id ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}`}>
-                  {category.name}
-                  <ChevronDown size={16} className="ml-1" />
-                </a>
-                {hoveredCategory === category.id && (
-                  <div className="absolute left-0 mt-2 bg-white border shadow-md rounded-md py-2 z-20 w-48">
-                    {categoryData.subcategories.map((sub, idx) => (
-                      <a key={idx} href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">{sub}</a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-            <a href="#" className="text-gray-700 hover:text-blue-600 flex items-center">Khuyến mãi HOT</a>
-          </div>
-        </div>
-      </nav>
+      <Header categories={categories} />
 
       {/* Breadcrumbs */}
       <div className="bg-white border-b">
@@ -578,34 +384,7 @@ export default function CategoryPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 mt-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="font-bold mb-4">ElectroShop</h3>
-              <p className="text-sm">Cung cấp thiết bị điện tử chất lượng cao với giá tốt nhất.</p>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">Danh mục</h3>
-              {categories.map(cat => (
-                <a key={cat.id} href="#" className="block text-sm hover:text-blue-400 mb-2">{cat.name}</a>
-              ))}
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">Hỗ trợ</h3>
-              <a href="#" className="block text-sm hover:text-blue-400 mb-2">Liên hệ</a>
-              <a href="#" className="block text-sm hover:text-blue-400 mb-2">Chính sách bảo hành</a>
-              <a href="#" className="block text-sm hover:text-blue-400 mb-2">Hướng dẫn mua hàng</a>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">Liên hệ</h3>
-              <p className="text-sm">Hotline: 1800 1234</p>
-              <p className="text-sm">Email: support@electroshop.com</p>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer categories={categories} />
     </div>
   );
 }

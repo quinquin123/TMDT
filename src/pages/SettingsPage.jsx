@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import { User, Lock, Bell, CreditCard, LogOut, ChevronRight, ShoppingCart, Heart, Search, Menu, X } from 'lucide-react';
+import { User, Lock, Bell, CreditCard, LogOut, ChevronRight } from 'lucide-react';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+
+const categories = [
+  { id: 1, name: 'Điện thoại', subcategories: ['iPhone', 'Samsung', 'Xiaomi', 'OPPO'] },
+  { id: 2, name: 'Laptop', subcategories: ['Macbook', 'Dell', 'HP', 'Lenovo', 'Asus'] },
+  { id: 3, name: 'Máy tính bảng', subcategories: ['iPad', 'Samsung Galaxy Tab', 'Xiaomi Pad'] },
+  { id: 4, name: 'Tai nghe', subcategories: ['AirPods', 'Sony', 'JBL', 'Beats'] },
+  { id: 5, name: 'Đồng hồ thông minh', subcategories: ['Apple Watch', 'Samsung Galaxy Watch', 'Xiaomi Watch'] },
+];
 
 export default function AccountManagement() {
   const [activeTab, setActiveTab] = useState('profile');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState({
     name: 'Nguyễn Văn A',
     email: 'nguyen.van.a@example.com',
@@ -246,92 +255,7 @@ export default function AccountManagement() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top bar */}
-      <div className="bg-gray-900 text-white py-2">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <div className="text-sm">
-            <span className="mr-4">Hotline: 1800 1234</span>
-            <span>Email: support@electroshop.com</span>
-          </div>
-          <div className="text-sm">
-            <a href="#" className="mr-4">Tra cứu đơn hàng</a>
-            <a href="#">Hệ thống cửa hàng</a>
-          </div>
-        </div>
-      </div>
-
-      {/* Header */}
-      <header className="bg-white shadow-md sticky top-0 z-30">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
-            <div className="flex items-center">
-              <button className="mr-2 md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-              <h1 className="text-2xl font-bold text-blue-600">ElectroShop</h1>
-            </div>
-
-            <div className="hidden md:flex flex-grow mx-8 relative">
-              <input
-                type="text"
-                placeholder="Tìm kiếm sản phẩm..."
-                className="w-full py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button className="bg-blue-600 text-white p-2 rounded-r-md hover:bg-blue-700">
-                <Search size={20} />
-              </button>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <a href="#" className="hidden md:flex items-center text-gray-700 hover:text-blue-600">
-                <User size={20} className="mr-1" />
-                <span>{user.name}</span>
-              </a>
-              <a href="#" className="hidden md:flex items-center text-gray-700 hover:text-blue-600">
-                <Heart size={20} className="mr-1" />
-                <span>Yêu thích</span>
-              </a>
-              <a href="#" className="flex items-center text-gray-700 hover:text-blue-600 relative">
-                <ShoppingCart size={20} className="mr-1" />
-                <span className="hidden md:inline">Giỏ hàng</span>
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
-              </a>
-            </div>
-          </div>
-
-          <div className="md:hidden pb-4">
-            <div className="flex relative">
-              <input
-                type="text"
-                placeholder="Tìm kiếm sản phẩm..."
-                className="w-full py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none"
-              />
-              <button className="bg-blue-600 text-white p-2 rounded-r-md">
-                <Search size={20} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setMobileMenuOpen(false)}>
-          <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-xl p-4 z-50" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Menu</h2>
-              <button onClick={() => setMobileMenuOpen(false)}>
-                <X size={24} />
-              </button>
-            </div>
-            <div className="space-y-1">
-              <a href="#" className="block py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md">Tài khoản</a>
-              <a href="#" className="block py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md">Yêu thích</a>
-              <a href="#" className="block py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md">Giỏ hàng</a>
-            </div>
-          </div>
-        </div>
-      )}
+      <Header categories={categories} />
 
       {/* Main content */}
       <main className="container mx-auto px-4 py-8">
@@ -378,36 +302,7 @@ export default function AccountManagement() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white">
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">ElectroShop</h3>
-              <p className="mb-4">Chuyên cung cấp các sản phẩm điện tử chính hãng với giá tốt nhất thị trường.</p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Hỗ Trợ Khách Hàng</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-blue-400">Hướng dẫn mua hàng</a></li>
-                <li><a href="#" className="hover:text-blue-400">Chính sách bảo hành</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Thông Tin Liên Hệ</h3>
-              <ul className="space-y-2">
-                <li>Địa chỉ: 123 Đường Công Nghệ, TP.HCM</li>
-                <li>Hotline: 1800 1234</li>
-                <li>Email: support@electroshop.com</li>
-              </ul>
-            </div>
-            <div></div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-6 text-center">
-            <p className="text-sm">© 2025 ElectroShop. All rights reserved. Designed by xAI Team.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer categories={categories} />
     </div>
   );
 }
