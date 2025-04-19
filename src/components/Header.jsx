@@ -42,7 +42,7 @@ const Header = ({ categories }) => {
             <NavLink 
               to="/orders"
               className={({ isActive }) => 
-                isActive ? 'text-blue-300' : 'hover:text-blue-300 transition-colors'
+                isActive ? 'text-green-300' : 'hover:text-green-300 transition-colors'
               }
             >
               Tra cứu đơn hàng
@@ -50,7 +50,7 @@ const Header = ({ categories }) => {
             <NavLink
               to="/stores"
               className={({ isActive }) => 
-                isActive ? 'text-blue-300' : 'hover:text-blue-300 transition-colors'
+                isActive ? 'text-green-300' : 'hover:text-green-300 transition-colors'
               }
             >
               Hệ thống cửa hàng
@@ -58,10 +58,11 @@ const Header = ({ categories }) => {
           </div>
         </div>
       </div>
+
       {/* Main Header */}
-      <header className="bg-white shadow-md sticky top-0 z-30">
+      <header className="bg-emerald-200 shadow-md sticky top-0 z-30">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
+          <div className="flex items-center justify-between py-5">
             {/* Logo and Mobile Menu Button */}
             <div className="flex items-center">
               <button 
@@ -71,7 +72,7 @@ const Header = ({ categories }) => {
               >
                 {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
-              <Link to="/" className="text-2xl font-bold text-red-600 hover:text-red-700 transition-colors">
+              <Link to="/" className="text-2xl font-extrabold text-red-600 hover:text-red-700 transition-colors tracking-tight">
                 TechSphere
               </Link>
             </div>
@@ -84,14 +85,14 @@ const Header = ({ categories }) => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Tìm kiếm sản phẩm..." 
-                className="w-full py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full py-2 px-4 border border-green-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
               <button 
                 onClick={handleSearch}
-                className="bg-blue-600 text-white p-2 rounded-r-md hover:bg-blue-700 transition-colors"
+                className="bg-green-600 text-white p-2 rounded-r-md hover:bg-green-700 transition-colors"
                 aria-label="Search"
               >
-                <Search size={20} />
+                <Search size={22} />
               </button>
             </div>
 
@@ -102,28 +103,28 @@ const Header = ({ categories }) => {
                   <NavLink 
                     to="/account" 
                     className={({ isActive }) => 
-                      `hidden md:flex items-center hover:text-blue-600 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-700'}`
+                      `hidden md:flex items-center hover:text-green-600 transition-colors ${isActive ? 'text-green-600' : 'text-gray-800'}`
                     }
                   >
-                    <User size={20} className="mr-1" />
+                    <User size={22} className="mr-1" />
                     <span className="hidden lg:inline">Tài khoản</span>
                   </NavLink>
                   <NavLink 
                     to="/wishlist" 
                     className={({ isActive }) => 
-                      `hidden md:flex items-center hover:text-blue-600 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-700'}`
+                      `hidden md:flex items-center hover:text-green-600 transition-colors ${isActive ? 'text-green-600' : 'text-gray-800'}`
                     }
                   >
-                    <Heart size={20} className="mr-1" />
+                    <Heart size={22} className="mr-1" />
                     <span className="hidden lg:inline">Yêu thích</span>
                   </NavLink>
                   <NavLink 
                     to="/cart" 
                     className={({ isActive }) => 
-                      `flex items-center hover:text-blue-600 transition-colors relative ${isActive ? 'text-blue-600' : 'text-gray-700'}`
+                      `flex items-center hover:text-green-600 transition-colors relative ${isActive ? 'text-green-600' : 'text-gray-800'}`
                     }
                   >
-                    <ShoppingCart size={20} className="mr-1" />
+                    <ShoppingCart size={22} className="mr-1" />
                     <span className="hidden md:inline">Giỏ hàng</span>
                     <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                       3
@@ -131,9 +132,9 @@ const Header = ({ categories }) => {
                   </NavLink>
                   <button
                     onClick={handleLogout}
-                    className="hidden md:flex items-center hover:text-red-600 transition-colors text-gray-700"
+                    className="hidden md:flex items-center hover:text-red-600 transition-colors text-gray-800"
                   >
-                    <LogOut size={20} className="mr-1" />
+                    <LogOut size={22} className="mr-1" />
                     <span className="hidden lg:inline">Đăng xuất</span>
                   </button>
                 </>
@@ -142,7 +143,7 @@ const Header = ({ categories }) => {
                   <NavLink
                     to="/login"
                     className={({ isActive }) => 
-                      `flex items-center hover:text-blue-600 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-700'}`
+                      `flex items-center hover:text-green-600 transition-colors ${isActive ? 'text-green-600' : 'text-gray-800'}`
                     }
                   >
                     <span className="text-sm md:text-base">Đăng nhập</span>
@@ -150,7 +151,7 @@ const Header = ({ categories }) => {
                   <NavLink
                     to="/register"
                     className={({ isActive }) => 
-                      `flex items-center hover:text-blue-600 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-700'}`
+                      `flex items-center hover:text-green-600 transition-colors ${isActive ? 'text-green-600' : 'text-gray-800'}`
                     }
                   >
                     <span className="text-sm md:text-base">Đăng ký</span>
@@ -170,14 +171,14 @@ const Header = ({ categories }) => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Tìm kiếm sản phẩm..." 
-                  className="w-full py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full py-2 px-4 border border-green-300 rounded-l-md focus:outline-none focus:ring-1 focus:ring-green-500"
                 />
                 <button 
                   onClick={handleSearch}
-                  className="bg-blue-600 text-white p-2 rounded-r-md hover:bg-blue-700 transition-colors"
+                  className="bg-green-600 text-white p-2 rounded-r-md hover:bg-green-700 transition-colors"
                   aria-label="Search"
                 >
-                  <Search size={20} />
+                  <Search size={22} />
                 </button>
               </div>
             </div>
@@ -188,9 +189,9 @@ const Header = ({ categories }) => {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setMobileMenuOpen(false)}>
-          <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-xl p-4 z-50 overflow-y-auto" onClick={e => e.stopPropagation()}>
+          <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-green-50 shadow-xl p-4 z-50 overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Menu</h2>
+              <h2 className="text-xl font-semibold text-gray-800">Menu</h2>
               <button 
                 onClick={() => setMobileMenuOpen(false)}
                 aria-label="Close menu"
@@ -205,7 +206,7 @@ const Header = ({ categories }) => {
                     to="/account" 
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
                     }
                   >
                     Tài khoản
@@ -214,7 +215,7 @@ const Header = ({ categories }) => {
                     to="/wishlist" 
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
                     }
                   >
                     Yêu thích
@@ -223,7 +224,7 @@ const Header = ({ categories }) => {
                     to="/cart" 
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
                     }
                   >
                     Giỏ hàng
@@ -241,7 +242,7 @@ const Header = ({ categories }) => {
                     to="/login" 
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
                     }
                   >
                     Login
@@ -250,7 +251,7 @@ const Header = ({ categories }) => {
                     to="/register" 
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
                     }
                   >
                     Đăng ký
@@ -267,7 +268,7 @@ const Header = ({ categories }) => {
                     to={`/detail?category=${category.name}`}
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
                     }
                   >
                     {category.name}
@@ -278,31 +279,21 @@ const Header = ({ categories }) => {
               )}
               
               <div className="border-t my-2"></div>
-              <NavLink 
-                to="/detail" 
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) => 
-                  `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
-                }
-              >
-                Tìm kiếm nâng cao
-                
-              </NavLink>
+              
               <NavLink 
                 to="/promotions" 
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) => 
-                  `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                  `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
                 }
               >
                 Khuyến mãi
-                
               </NavLink>
               <NavLink 
                 to="/news" 
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) => 
-                  `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                  `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
                 }
               >
                 Tin tức
@@ -311,7 +302,7 @@ const Header = ({ categories }) => {
                 to="/contact" 
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) => 
-                  `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                  `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
                 }
               >
                 Liên hệ
@@ -322,17 +313,17 @@ const Header = ({ categories }) => {
       )}
 
       {/* Desktop Navigation */}
-      <nav className="bg-white shadow-sm hidden md:block">
+      <nav className="bg-emerald-200 border-b border-green-200 hidden md:block">
         <div className="container mx-auto px-4">
-          <div className="flex items-center space-x-8 py-3">
+          <div className="flex items-center space-x-6 py-3">
             {categories && categories.length > 0 ? (
               categories.map((category) => (
                 <NavLink
                   key={category.id}
                   to={`/detail?category=${category.name}`}
                   className={({ isActive }) => 
-                    `text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-1 rounded-md transition-colors ${
-                      isActive ? 'text-blue-600 font-medium' : ''
+                    `text-gray-800 hover:bg-blue-600 hover:text-white hover:scale-105 px-3 py-1 rounded-md transition-all duration-200 ${
+                      isActive ? 'text-green-700 font-semibold' : ''
                     }`
                   }
                 >
@@ -342,23 +333,23 @@ const Header = ({ categories }) => {
             ) : (
               <span className="text-gray-500">Đang tải danh mục...</span>
             )}
+            
             <NavLink 
-                to="/detail" 
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) => 
-                  `text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-1 rounded-md transition-colors ${
-                    isActive ? 'text-blue-600 font-medium' : ''
-                  }`
-                }
-              >
-                Tìm kiếm nâng cao
-                
-              </NavLink>
+              to="/detail" 
+              className={({ isActive }) => 
+                `text-gray-800 hover:bg-blue-600 hover:text-white hover:scale-105 px-3 py-1 rounded-md transition-all duration-200 ${
+                  isActive ? 'text-green-700 font-semibold' : ''
+                }`
+              }
+            >
+              Tìm kiếm nâng cao
+            </NavLink>
+            
             <NavLink 
               to="/promotions" 
               className={({ isActive }) => 
-                `text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-1 rounded-md transition-colors ${
-                  isActive ? 'text-blue-600 font-medium' : ''
+                `text-gray-800 hover:bg-blue-600 hover:text-white hover:scale-105 px-3 py-1 rounded-md transition-all duration-200 ${
+                  isActive ? 'text-green-700 font-semibold' : ''
                 }`
               }
             >
@@ -368,8 +359,8 @@ const Header = ({ categories }) => {
             <NavLink 
               to="/news" 
               className={({ isActive }) => 
-                `text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-1 rounded-md transition-colors ${
-                  isActive ? 'text-blue-600 font-medium' : ''
+                `text-gray-800 hover:bg-blue-600 hover:text-white hover:scale-105 px-3 py-1 rounded-md transition-all duration-200 ${
+                  isActive ? 'text-green-700 font-semibold' : ''
                 }`
               }
             >
@@ -379,8 +370,8 @@ const Header = ({ categories }) => {
             <NavLink 
               to="/contact" 
               className={({ isActive }) => 
-                `text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-1 rounded-md transition-colors ${
-                  isActive ? 'text-blue-600 font-medium' : ''
+                `text-gray-800 hover:bg-blue-600 hover:text-white hover:scale-105 px-3 py-1 rounded-md transition-all duration-200 ${
+                  isActive ? 'text-green-700 font-semibold' : ''
                 }`
               }
             >
