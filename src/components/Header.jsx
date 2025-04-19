@@ -58,7 +58,6 @@ const Header = ({ categories }) => {
           </div>
         </div>
       </div>
-
       {/* Main Header */}
       <header className="bg-white shadow-md sticky top-0 z-30">
         <div className="container mx-auto px-4">
@@ -279,7 +278,16 @@ const Header = ({ categories }) => {
               )}
               
               <div className="border-t my-2"></div>
-              
+              <NavLink 
+                to="/detail" 
+                onClick={() => setMobileMenuOpen(false)}
+                className={({ isActive }) => 
+                  `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                }
+              >
+                Tìm kiếm nâng cao
+                
+              </NavLink>
               <NavLink 
                 to="/promotions" 
                 onClick={() => setMobileMenuOpen(false)}
@@ -288,6 +296,7 @@ const Header = ({ categories }) => {
                 }
               >
                 Khuyến mãi
+                
               </NavLink>
               <NavLink 
                 to="/news" 
@@ -322,7 +331,9 @@ const Header = ({ categories }) => {
                   key={category.id}
                   to={`/detail?category=${category.name}`}
                   className={({ isActive }) => 
-                    `text-gray-700 hover:text-blue-600 py-1 ${isActive ? 'text-blue-600 font-medium' : ''}`
+                    `text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-1 rounded-md transition-colors ${
+                      isActive ? 'text-blue-600 font-medium' : ''
+                    }`
                   }
                 >
                   {category.name}
@@ -331,11 +342,24 @@ const Header = ({ categories }) => {
             ) : (
               <span className="text-gray-500">Đang tải danh mục...</span>
             )}
-            
+            <NavLink 
+                to="/detail" 
+                onClick={() => setMobileMenuOpen(false)}
+                className={({ isActive }) => 
+                  `text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-1 rounded-md transition-colors ${
+                    isActive ? 'text-blue-600 font-medium' : ''
+                  }`
+                }
+              >
+                Tìm kiếm nâng cao
+                
+              </NavLink>
             <NavLink 
               to="/promotions" 
               className={({ isActive }) => 
-                `text-gray-700 hover:text-blue-600 py-1 ${isActive ? 'text-blue-600 font-medium' : ''}`
+                `text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-1 rounded-md transition-colors ${
+                  isActive ? 'text-blue-600 font-medium' : ''
+                }`
               }
             >
               Khuyến mãi
@@ -344,7 +368,9 @@ const Header = ({ categories }) => {
             <NavLink 
               to="/news" 
               className={({ isActive }) => 
-                `text-gray-700 hover:text-blue-600 py-1 ${isActive ? 'text-blue-600 font-medium' : ''}`
+                `text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-1 rounded-md transition-colors ${
+                  isActive ? 'text-blue-600 font-medium' : ''
+                }`
               }
             >
               Tin tức
@@ -353,7 +379,9 @@ const Header = ({ categories }) => {
             <NavLink 
               to="/contact" 
               className={({ isActive }) => 
-                `text-gray-700 hover:text-blue-600 py-1 ${isActive ? 'text-blue-600 font-medium' : ''}`
+                `text-gray-700 hover:bg-blue-600 hover:text-white px-3 py-1 rounded-md transition-colors ${
+                  isActive ? 'text-blue-600 font-medium' : ''
+                }`
               }
             >
               Liên hệ
