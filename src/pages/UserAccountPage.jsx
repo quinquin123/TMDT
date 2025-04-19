@@ -1,16 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { ChevronRight, Trash2 } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 // Dữ liệu mẫu
-const mockUser = {
-  name: 'Nguyễn Văn A',
-  email: 'nguyenvana@example.com',
-  phone: '0909123456',
-};
-
 const mockOrders = [
   { id: 'DH123456', date: '2025-04-08', total: 46980000, status: 'Chờ xử lý', items: [{ name: 'iPhone 15 Pro Max', price: 32990000, quantity: 1 }, { name: 'Sony WH-1000XM5', price: 13990000, quantity: 1 }] },
   { id: 'DH789101', date: '2025-04-07', total: 36990000, status: 'Thành công', items: [{ name: 'MacBook Pro M3', price: 36990000, quantity: 1 }] },
@@ -31,47 +26,15 @@ const categories = [
 ];
 
 export default function UserAccountPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Ban đầu chưa đăng nhập
-  const [activeTab, setActiveTab] = useState('login'); // Mặc định là tab đăng nhập
+  const { isLoggedIn, userInfo, setUserInfo, logout } = useContext(AuthContext);
+  const [activeTab, setActiveTab] = useState('profile');
   const [orderTab, setOrderTab] = useState('Tất cả');
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [userInfo, setUserInfo] = useState(mockUser);
   const [favorites, setFavorites] = useState(mockFavorites);
   const [orders, setOrders] = useState(mockOrders);
-  const [loginData, setLoginData] = useState({ email: '', password: '' });
-  const [registerData, setRegisterData] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '' });
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(price);
-  };
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (loginData.email === 'nguyenvana@example.com' && loginData.password === '123456') {
-      setIsLoggedIn(true);
-      setActiveTab('profile');
-      alert('Đăng nhập thành công!');
-    } else {
-      alert('Email hoặc mật khẩu không đúng!');
-    }
-  };
-
-  const handleRegister = (e) => {
-    e.preventDefault();
-    if (registerData.password !== registerData.confirmPassword) {
-      alert('Mật khẩu xác nhận không khớp!');
-      return;
-    }
-    // Logic giả lập đăng ký
-    setUserInfo({ name: registerData.name, email: registerData.email, phone: registerData.phone });
-    setIsLoggedIn(true);
-    setActiveTab('profile');
-    alert('Đăng ký thành công!');
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setActiveTab('login');
   };
 
   const handleUpdateProfile = (e) => {
@@ -96,6 +59,10 @@ export default function UserAccountPage() {
   const orderTabs = ['Tất cả', 'Chờ xử lý', 'Đã xác nhận', 'Đang chuyển hàng', 'Đang giao hàng', 'Đã hủy', 'Thành công'];
   const filteredOrders = orderTab === 'Tất cả' ? orders : orders.filter(order => order.status === orderTab);
 
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header categories={categories} />
@@ -115,139 +82,65 @@ export default function UserAccountPage() {
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="lg:w-1/4">
             <div className="bg-white rounded-lg shadow-sm p-4">
-              {isLoggedIn ? (
-                <>
-                  <div className="mb-4">
-                    <p className="font-medium">{userInfo.name}</p>
-                    <p className="text-sm text-gray-600">{userInfo.email}</p>
-                  </div>
-                  <nav className="space-y-2">
-                    <button onClick={() => setActiveTab('profile')} className={`w-full text-left py-2 px-4 rounded-md ${activeTab === 'profile' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}>Thông tin cá nhân</button>
-                    <button onClick={() => setActiveTab('orders')} className={`w-full text-left py-2 px-4 rounded-md ${activeTab === 'orders' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}>Lịch sử đơn hàng</button>
-                    <button onClick={() => setActiveTab('favorites')} className={`w-full text-left py-2 px-4 rounded-md ${activeTab === 'favorites' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}>Sản phẩm yêu thích</button>
-                    <button onClick={handleLogout} className="w-full text-left py-2 px-4 rounded-md text-red-600 hover:bg-red-100">Đăng xuất</button>
-                  </nav>
-                </>
-              ) : (
-                <nav className="space-y-2">
-                  <button onClick={() => setActiveTab('login')} className={`w-full text-left py-2 px-4 rounded-md ${activeTab === 'login' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}>Đăng nhập</button>
-                  <button onClick={() => setActiveTab('register')} className={`w-full text-left py-2 px-4 rounded-md ${activeTab === 'register' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}>Đăng ký</button>
-                </nav>
-              )}
+              <div className="mb-4">
+                <p className="font-medium">{userInfo.name}</p>
+                <p className="text-sm text-gray-600">{userInfo.email}</p>
+              </div>
+              <nav className="space-y-2">
+                <button onClick={() => setActiveTab('profile')} className={`w-full text-left py-2 px-4 rounded-md ${activeTab === 'profile' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}>
+                  Thông tin cá nhân
+                </button>
+                <button onClick={() => setActiveTab('orders')} className={`w-full text-left py-2 px-4 rounded-md ${activeTab === 'orders' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}>
+                  Lịch sử đơn hàng
+                </button>
+                <button onClick={() => setActiveTab('favorites')} className={`w-full text-left py-2 px-4 rounded-md ${activeTab === 'favorites' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}>
+                  Sản phẩm yêu thích
+                </button>
+                <button onClick={logout} className="w-full text-left py-2 px-4 rounded-md text-red-600 hover:bg-red-100">
+                  Đăng xuất
+                </button>
+              </nav>
             </div>
           </div>
 
           <div className="lg:w-3/4">
             <div className="bg-white rounded-lg shadow-sm p-6">
-              {!isLoggedIn && activeTab === 'login' && (
-                <form onSubmit={handleLogin} className="space-y-4 max-w-md mx-auto">
-                  <h2 className="text-xl font-semibold mb-4">Đăng nhập</h2>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Email</label>
-                    <input
-                      type="email"
-                      value={loginData.email}
-                      onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Mật khẩu</label>
-                    <input
-                      type="password"
-                      value={loginData.password}
-                      onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 w-full">Đăng nhập</button>
-                  <p className="text-sm text-center">
-                    Chưa có tài khoản?{' '}
-                    <button onClick={() => setActiveTab('register')} className="text-blue-600 hover:underline">Đăng ký ngay</button>
-                  </p>
-                </form>
-              )}
-              {!isLoggedIn && activeTab === 'register' && (
-                <form onSubmit={handleRegister} className="space-y-4 max-w-md mx-auto">
-                  <h2 className="text-xl font-semibold mb-4">Đăng ký</h2>
+              {activeTab === 'profile' && (
+                <form onSubmit={handleUpdateProfile} className="space-y-4">
+                  <h2 className="text-xl font-semibold mb-4">Thông tin cá nhân</h2>
                   <div>
                     <label className="block text-sm font-medium mb-1">Họ và tên</label>
                     <input
                       type="text"
-                      value={registerData.name}
-                      onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
+                      value={userInfo.name}
+                      onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Email</label>
                     <input
                       type="email"
-                      value={registerData.email}
-                      onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+                      value={userInfo.email}
+                      onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Số điện thoại</label>
                     <input
                       type="tel"
-                      value={registerData.phone}
-                      onChange={(e) => setRegisterData({ ...registerData, phone: e.target.value })}
+                      value={userInfo.phone}
+                      onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Mật khẩu</label>
-                    <input
-                      type="password"
-                      value={registerData.password}
-                      onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Xác nhận mật khẩu</label>
-                    <input
-                      type="password"
-                      value={registerData.confirmPassword}
-                      onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })}
-                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 w-full">Đăng ký</button>
-                  <p className="text-sm text-center">
-                    Đã có tài khoản?{' '}
-                    <button onClick={() => setActiveTab('login')} className="text-blue-600 hover:underline">Đăng nhập</button>
-                  </p>
+                  <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+                    Cập nhật
+                  </button>
                 </form>
               )}
-              {isLoggedIn && activeTab === 'profile' && (
-                <form onSubmit={handleUpdateProfile} className="space-y-4">
-                  <h2 className="text-xl font-semibold mb-4">Thông tin cá nhân</h2>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Họ và tên</label>
-                    <input type="text" value={userInfo.name} onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Email</label>
-                    <input type="email" value={userInfo.email} onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Số điện thoại</label>
-                    <input type="tel" value={userInfo.phone} onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                  </div>
-                  <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">Cập nhật</button>
-                </form>
-              )}
-              {isLoggedIn && activeTab === 'orders' && !selectedOrder && (
+              {activeTab === 'orders' && !selectedOrder && (
                 <div>
                   <h2 className="text-xl font-semibold mb-4">Lịch sử đơn hàng</h2>
                   <div className="flex flex-wrap gap-2 mb-4">
@@ -288,9 +181,11 @@ export default function UserAccountPage() {
                   )}
                 </div>
               )}
-              {isLoggedIn && activeTab === 'orders' && selectedOrder && (
+              {activeTab === 'orders' && selectedOrder && (
                 <div>
-                  <button onClick={() => setSelectedOrder(null)} className="text-blue-600 mb-4 hover:underline">Quay lại</button>
+                  <button onClick={() => setSelectedOrder(null)} className="text-blue-600 mb-4 hover:underline">
+                    Quay lại
+                  </button>
                   <h2 className="text-xl font-semibold mb-4">Chi tiết đơn hàng #{selectedOrder.id}</h2>
                   <div className="space-y-4">
                     <div>
@@ -327,7 +222,7 @@ export default function UserAccountPage() {
                   </div>
                 </div>
               )}
-              {isLoggedIn && activeTab === 'favorites' && (
+              {activeTab === 'favorites' && (
                 <div>
                   <h2 className="text-xl font-semibold mb-4">Sản phẩm yêu thích</h2>
                   {favorites.length === 0 ? (

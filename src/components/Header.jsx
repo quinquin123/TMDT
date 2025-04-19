@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
-import { Search, ShoppingCart, Menu, X, Heart, User, ChevronDown } from 'lucide-react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Search, ShoppingCart, Menu, X, Heart, User, ChevronDown, LogOut } from 'lucide-react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const Header = ({ categories }) => {
+  const { isLoggedIn, logout } = useContext(AuthContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(null);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    setMobileMenuOpen(false);
+    navigate('/');
+  };
 
   return (
     <>
@@ -71,36 +80,66 @@ const Header = ({ categories }) => {
 
             {/* Action Icons */}
             <div className="flex items-center space-x-4 md:space-x-6">
-              <NavLink 
-                to="/account" 
-                className={({ isActive }) => 
-                  `hidden md:flex items-center hover:text-blue-600 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-700'}`
-                }
-              >
-                <User size={20} className="mr-1" />
-                <span className="hidden lg:inline">Tài khoản</span>
-              </NavLink>
-              <NavLink 
-                to="/wishlist" 
-                className={({ isActive }) => 
-                  `hidden md:flex items-center hover:text-blue-600 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-700'}`
-                }
-              >
-                <Heart size={20} className="mr-1" />
-                <span className="hidden lg:inline">Yêu thích</span>
-              </NavLink>
-              <NavLink 
-                to="/cart" 
-                className={({ isActive }) => 
-                  `flex items-center hover:text-blue-600 transition-colors relative ${isActive ? 'text-blue-600' : 'text-gray-700'}`
-                }
-              >
-                <ShoppingCart size={20} className="mr-1" />
-                <span className="hidden md:inline">Giỏ hàng</span>
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  3
-                </span>
-              </NavLink>
+              {isLoggedIn ? (
+                <>
+                  <NavLink 
+                    to="/account" 
+                    className={({ isActive }) => 
+                      `hidden md:flex items-center hover:text-blue-600 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-700'}`
+                    }
+                  >
+                    <User size={20} className="mr-1" />
+                    <span className="hidden lg:inline">Tài khoản</span>
+                  </NavLink>
+                  <NavLink 
+                    to="/wishlist" 
+                    className={({ isActive }) => 
+                      `hidden md:flex items-center hover:text-blue-600 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-700'}`
+                    }
+                  >
+                    <Heart size={20} className="mr-1" />
+                    <span className="hidden lg:inline">Yêu thích</span>
+                  </NavLink>
+                  <NavLink 
+                    to="/cart" 
+                    className={({ isActive }) => 
+                      `flex items-center hover:text-blue-600 transition-colors relative ${isActive ? 'text-blue-600' : 'text-gray-700'}`
+                    }
+                  >
+                    <ShoppingCart size={20} className="mr-1" />
+                    <span className="hidden md:inline">Giỏ hàng</span>
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      3
+                    </span>
+                  </NavLink>
+                  <button
+                    onClick={handleLogout}
+                    className="hidden md:flex items-center hover:text-red-600 transition-colors text-gray-700"
+                  >
+                    <LogOut size={20} className="mr-1" />
+                    <span className="hidden lg:inline">Đăng xuất</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <NavLink
+                    to="/login"
+                    className={({ isActive }) => 
+                      `flex items-center hover:text-blue-600 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-700'}`
+                    }
+                  >
+                    <span className="text-sm md:text-base">Đăng nhập</span>
+                  </NavLink>
+                  <NavLink
+                    to="/register"
+                    className={({ isActive }) => 
+                      `flex items-center hover:text-blue-600 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-700'}`
+                    }
+                  >
+                    <span className="text-sm md:text-base">Đăng ký</span>
+                  </NavLink>
+                </>
+              )}
             </div>
           </div>
 
@@ -140,24 +179,64 @@ const Header = ({ categories }) => {
             </div>
             
             <nav className="space-y-1">
-              <NavLink 
-                to="/account" 
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) => 
-                  `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
-                }
-              >
-                Tài khoản
-              </NavLink>
-              <NavLink 
-                to="/wishlist" 
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) => 
-                  `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
-                }
-              >
-                Yêu thích
-              </NavLink>
+              {isLoggedIn ? (
+                <>
+                  <NavLink 
+                    to="/account" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) => 
+                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                    }
+                  >
+                    Tài khoản
+                  </NavLink>
+                  <NavLink 
+                    to="/wishlist" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) => 
+                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                    }
+                  >
+                    Yêu thích
+                  </NavLink>
+                  <NavLink 
+                    to="/cart" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) => 
+                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                    }
+                  >
+                    Giỏ hàng
+                  </NavLink>
+                  <button
+                    onClick={handleLogout}
+                    className="block py-2 px-3 hover:bg-red-100 rounded-md text-red-600 w-full text-left"
+                  >
+                    Đăng xuất
+                  </button>
+                </>
+              ) : (
+                <>
+                  <NavLink 
+                    to="/login" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) => 
+                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                    }
+                  >
+                    Login
+                  </NavLink>
+                  <NavLink 
+                    to="/register" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) => 
+                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                    }
+                  >
+                    Đăng ký
+                  </NavLink>
+                </>
+              )}
               
               <div className="border-t my-2"></div>
               
@@ -197,6 +276,8 @@ const Header = ({ categories }) => {
                 to="/news" 
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) => 
+
+
                   `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
                 }
               >

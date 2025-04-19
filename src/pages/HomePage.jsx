@@ -122,7 +122,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4 py-8">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">Sản Phẩm Mới</h2>
-              <Link to="/products/new" className="text-blue-600 hover:underline flex items-center">
+              <Link to="/newProducts" className="text-blue-600 hover:underline flex items-center">
                 Xem tất cả <ChevronRight size={16} />
               </Link>
             </div>

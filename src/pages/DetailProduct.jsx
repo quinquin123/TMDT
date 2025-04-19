@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 // Dữ liệu mẫu (dựa trên categoryData từ trang danh mục)
 const productData = {
@@ -47,8 +48,30 @@ const categories = [
 ];
 
 export default function ProductDetailPage() {
+  const { isLoggedIn } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(productData.images[0]);
   const [quantity, setQuantity] = useState(1);
+
+  // Xử lý khi bấm Thêm vào giỏ hàng
+  const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      navigate('/login');
+      return;
+    }
+    alert(`Đã thêm ${quantity} ${productData.name} vào giỏ hàng!`);
+    // TODO: Thêm logic lưu sản phẩm vào giỏ hàng (ví dụ: cập nhật state/context hoặc gọi API)
+  };
+
+  // Xử lý khi bấm Mua ngay
+  const handleBuyNow = () => {
+    if (!isLoggedIn) {
+      navigate('/login');
+      return;
+    }
+    alert(`Chuyển đến thanh toán cho ${quantity} ${productData.name}!`);
+    // TODO: Thêm logic chuyển đến trang thanh toán (ví dụ: navigate('/checkout'))
+  };
 
   // Component RatingStars
   const RatingStars = ({ rating }) => (
@@ -66,9 +89,9 @@ export default function ProductDetailPage() {
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center text-sm">
-            <Link to={`/`} className="text-gray-500 hover:text-blue-600">Trang chủ</Link>
+            <Link to="/" className="text-gray-500 hover:text-blue-600">Trang chủ</Link>
             <span className="mx-2 text-gray-400">/</span>
-            <Link to={``} className="text-gray-500 hover:text-blue-600">Điện thoại</Link>
+            <Link to="/products?category=Điện thoại" className="text-gray-500 hover:text-blue-600">Điện thoại</Link>
             <span className="mx-2 text-gray-400">/</span>
             <span className="text-gray-700 font-medium">{productData.name}</span>
           </div>
@@ -138,10 +161,16 @@ export default function ProductDetailPage() {
                 </div>
               </div>
               <div className="flex gap-4">
-                <button className="flex-1 bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700">
+                <button
+                  onClick={handleAddToCart}
+                  className="flex-1 bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700"
+                >
                   Thêm vào giỏ hàng
                 </button>
-                <button className="flex-1 bg-orange-600 text-white py-3 rounded-md hover:bg-orange-700">
+                <button
+                  onClick={handleBuyNow}
+                  className="flex-1 bg-orange-600 text-white py-3 rounded-md hover:bg-orange-700"
+                >
                   Mua ngay
                 </button>
               </div>
@@ -197,7 +226,12 @@ export default function ProductDetailPage() {
                 <div className="mt-2">
                   <span className="text-red-600 font-bold text-lg">{product.price}</span>
                 </div>
-                <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Thêm vào giỏ</button>
+                <button
+                  onClick={handleAddToCart}
+                  className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
+                >
+                  Thêm vào giỏ
+                </button>
               </div>
             ))}
           </div>
