@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ChevronDown, ChevronUp, Filter } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import { AuthContext } from '../context/AuthContext';
 
 // Data mẫu
 const categoryData = {
@@ -48,7 +50,9 @@ const categories = [
 
 export default function CategoryPage() {
   // State
-  // eslint-disable-next-line no-unused-vars
+  const { isLoggedIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [sortOption, setSortOption] = useState('featured');
   const [viewMode, setViewMode] = useState('grid');
@@ -65,22 +69,30 @@ export default function CategoryPage() {
     features: {}
   });
 
-  // Khởi tạo state cho features filter
-  useEffect(() => {
-    const initialFeatures = {};
-    categoryData.features.forEach(feature => {
-      initialFeatures[feature.id] = false;
-    });
-    setOpenFilterSection(prev => ({
-      ...prev,
-      features: initialFeatures
-    }));
-  }, []);
+  // Xử lý thêm vào giỏ hàng
+  const handleAddToCart = (product) => {
+    if (!isLoggedIn) {
+      navigate('/login');
+      return;
+    }
+    alert(`Đã thêm ${product.name} vào giỏ hàng!`);
+  };
 
-  // Lọc và sắp xếp sản phẩm
+  // Lấy query parameter 'search'
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const searchQuery = params.get('search')?.toLowerCase() || '';
+    
     let result = [...categoryData.products];
 
+    // Lọc theo từ khóa tìm kiếm
+    if (searchQuery) {
+      result = result.filter(product => 
+        product.name.toLowerCase().includes(searchQuery)
+      );
+    }
+
+    // Áp dụng các bộ lọc khác
     if (inStockOnly) {
       result = result.filter(product => product.inStock);
     }
@@ -107,6 +119,7 @@ export default function CategoryPage() {
       }
     });
 
+    // Sắp xếp
     switch (sortOption) {
       case 'price-asc':
         result.sort((a, b) => parseInt(a.price.replace(/\./g, '').replace('đ', '')) - parseInt(b.price.replace(/\./g, '').replace('đ', '')));
@@ -129,7 +142,19 @@ export default function CategoryPage() {
 
     setFilteredProducts(result);
     setCurrentPage(1);
-  }, [selectedPriceRanges, selectedBrands, selectedFeatures, inStockOnly, sortOption]);
+  }, [location.search, selectedPriceRanges, selectedBrands, selectedFeatures, inStockOnly, sortOption]);
+
+  // Khởi tạo state cho features filter
+  useEffect(() => {
+    const initialFeatures = {};
+    categoryData.features.forEach(feature => {
+      initialFeatures[feature.id] = false;
+    });
+    setOpenFilterSection(prev => ({
+      ...prev,
+      features: initialFeatures
+    }));
+  }, []);
 
   // Phân trang
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -214,7 +239,7 @@ export default function CategoryPage() {
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center text-sm">
-            <a href="/" className="text-gray-500 hover:text-blue-600">Trang chủ</a>
+            <Link to="/" className="text-gray-500 hover:text-blue-600">Trang chủ</Link>
             <span className="mx-2 text-gray-400">/</span>
             <span className="text-gray-700 font-medium">{categoryData.name}</span>
           </div>
@@ -335,7 +360,7 @@ export default function CategoryPage() {
             </div>
             {filteredProducts.length === 0 ? (
               <div className="text-center py-10">
-                <p className="text-gray-600">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
+                <p className="text-gray-600">Không tìm thấy sản phẩm nào phù hợp.</p>
               </div>
             ) : (
               <div className={viewMode === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" : "space-y-4"}>
@@ -363,7 +388,12 @@ export default function CategoryPage() {
                           {product.inStock ? 'Còn hàng' : 'Hết hàng'}
                         </span>
                       </div>
-                      <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Thêm vào giỏ</button>
+                      <button 
+                        onClick={() => handleAddToCart(product)}
+                        className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
+                      >
+                        Thêm vào giỏ
+                      </button>
                     </div>
                   </div>
                 ))}

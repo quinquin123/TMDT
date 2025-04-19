@@ -1,18 +1,32 @@
 import React, { useState, useContext } from 'react';
-import { Search, ShoppingCart, Menu, X, Heart, User, ChevronDown, LogOut } from 'lucide-react';
+import { Search, ShoppingCart, Menu, X, Heart, User, LogOut } from 'lucide-react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const Header = ({ categories }) => {
   const { isLoggedIn, logout } = useContext(AuthContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     setMobileMenuOpen(false);
     navigate('/');
+  };
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/detail?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery('');
+      setMobileMenuOpen(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
   };
 
   return (
@@ -67,10 +81,14 @@ const Header = ({ categories }) => {
             <div className="hidden md:flex flex-grow mx-8 relative max-w-2xl">
               <input 
                 type="text" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
                 placeholder="Tìm kiếm sản phẩm..." 
                 className="w-full py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <button 
+                onClick={handleSearch}
                 className="bg-blue-600 text-white p-2 rounded-r-md hover:bg-blue-700 transition-colors"
                 aria-label="Search"
               >
@@ -149,10 +167,14 @@ const Header = ({ categories }) => {
               <div className="flex relative">
                 <input 
                   type="text" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
                   placeholder="Tìm kiếm sản phẩm..." 
                   className="w-full py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
                 <button 
+                  onClick={handleSearch}
                   className="bg-blue-600 text-white p-2 rounded-r-md hover:bg-blue-700 transition-colors"
                   aria-label="Search"
                 >
@@ -177,7 +199,6 @@ const Header = ({ categories }) => {
                 <X size={24} />
               </button>
             </div>
-            
             <nav className="space-y-1">
               {isLoggedIn ? (
                 <>
@@ -240,26 +261,22 @@ const Header = ({ categories }) => {
               
               <div className="border-t my-2"></div>
               
-              {categories.map(category => (
-                <div key={category.id} className="mb-1">
-                  <button className="w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md flex justify-between items-center">
+              {categories && categories.length > 0 ? (
+                categories.map(category => (
+                  <NavLink
+                    key={category.id}
+                    to={`/detail?category=${category.name}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) => 
+                      `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
+                    }
+                  >
                     {category.name}
-                    <ChevronDown size={16} />
-                  </button>
-                  <div className="ml-4 mt-1 space-y-1">
-                    {category.subcategories.map((sub, idx) => (
-                      <Link
-                        key={idx}
-                        to={`/products?category=${category.name}&subcategory=${sub}`}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-md text-sm"
-                      >
-                        {sub}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                  </NavLink>
+                ))
+              ) : (
+                <span className="block py-2 px-3 text-gray-500">Đang tải danh mục...</span>
+              )}
               
               <div className="border-t my-2"></div>
               
@@ -276,8 +293,6 @@ const Header = ({ categories }) => {
                 to="/news" 
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) => 
-
-
                   `block py-2 px-3 hover:bg-gray-100 rounded-md ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'}`
                 }
               >
@@ -301,33 +316,21 @@ const Header = ({ categories }) => {
       <nav className="bg-white shadow-sm hidden md:block">
         <div className="container mx-auto px-4">
           <div className="flex items-center space-x-8 py-3">
-            {categories.map((category) => (
-              <div 
-                key={category.id} 
-                className="relative group"
-                onMouseEnter={() => setHoveredCategory(category.id)}
-                onMouseLeave={() => setHoveredCategory(null)}
-              >
-                <button className="text-gray-700 hover:text-blue-600 flex items-center py-1">
+            {categories && categories.length > 0 ? (
+              categories.map((category) => (
+                <NavLink
+                  key={category.id}
+                  to={`/detail?category=${category.name}`}
+                  className={({ isActive }) => 
+                    `text-gray-700 hover:text-blue-600 py-1 ${isActive ? 'text-blue-600 font-medium' : ''}`
+                  }
+                >
                   {category.name}
-                  <ChevronDown size={16} className="ml-1" />
-                </button>
-                
-                {hoveredCategory === category.id && (
-                  <div className="absolute left-0 mt-0 bg-white border shadow-lg rounded-md py-2 z-20 w-48">
-                    {category.subcategories.map((sub, idx) => (
-                      <Link
-                        key={idx}
-                        to={`/products?category=${category.name}&subcategory=${sub}`}
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
-                      >
-                        {sub}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+                </NavLink>
+              ))
+            ) : (
+              <span className="text-gray-500">Đang tải danh mục...</span>
+            )}
             
             <NavLink 
               to="/promotions" 
