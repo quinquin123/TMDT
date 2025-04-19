@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Search, ShoppingCart, Menu, X, Heart, User, LogOut } from 'lucide-react';
+import { Search, ShoppingCart, Menu, X, User, LogOut, Package } from 'lucide-react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
@@ -33,34 +33,16 @@ const Header = ({ categories }) => {
     <>
       {/* Top bar */}
       <div className="bg-gray-900 text-white py-2 text-sm">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-center items-center">
           <div className="mb-2 md:mb-0">
             <span className="mr-4">Hotline: 1800 1234</span>
             <span>Email: support@techsphere.com</span>
-          </div>
-          <div className="flex space-x-4">
-            <NavLink 
-              to="/orders"
-              className={({ isActive }) => 
-                isActive ? 'text-green-300' : 'hover:text-green-300 transition-colors'
-              }
-            >
-              Tra cứu đơn hàng
-            </NavLink>
-            <NavLink
-              to="/stores"
-              className={({ isActive }) => 
-                isActive ? 'text-green-300' : 'hover:text-green-300 transition-colors'
-              }
-            >
-              Hệ thống cửa hàng
-            </NavLink>
           </div>
         </div>
       </div>
 
       {/* Main Header */}
-      <header className="bg-emerald-200 shadow-md sticky top-0 z-30">
+      <header className="bg-green-100 shadow-md sticky top-0 z-30">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between py-5">
             {/* Logo and Mobile Menu Button */}
@@ -110,13 +92,13 @@ const Header = ({ categories }) => {
                     <span className="hidden lg:inline">Tài khoản</span>
                   </NavLink>
                   <NavLink 
-                    to="/wishlist" 
+                    to="/orders" 
                     className={({ isActive }) => 
                       `hidden md:flex items-center hover:text-green-600 transition-colors ${isActive ? 'text-green-600' : 'text-gray-800'}`
                     }
                   >
-                    <Heart size={22} className="mr-1" />
-                    <span className="hidden lg:inline">Yêu thích</span>
+                    <Package size={22} className="mr-1" />
+                    <span className="hidden lg:inline">Tra cứu đơn hàng</span>
                   </NavLink>
                   <NavLink 
                     to="/cart" 
@@ -206,25 +188,25 @@ const Header = ({ categories }) => {
                     to="/account" 
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
+                      `block py-2 px-3 hover:bg-green-100 rounded-md ${isActive ? 'text-green-700 bg-green-100' : 'text-gray-800'}`
                     }
                   >
                     Tài khoản
                   </NavLink>
                   <NavLink 
-                    to="/wishlist" 
+                    to="/orders" 
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
+                      `block py-2 px-3 hover:bg-green-100 rounded-md ${isActive ? 'text-green-700 bg-green-100' : 'text-gray-800'}`
                     }
                   >
-                    Yêu thích
+                    Tra cứu đơn hàng
                   </NavLink>
                   <NavLink 
                     to="/cart" 
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
+                      `block py-2 px-3 hover:bg-green-100 rounded-md ${isActive ? 'text-green-700 bg-green-100' : 'text-gray-800'}`
                     }
                   >
                     Giỏ hàng
@@ -242,7 +224,7 @@ const Header = ({ categories }) => {
                     to="/login" 
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
+                      `block py-2 px-3 hover:bg-green-100 rounded-md ${isActive ? 'text-green-700 bg-green-100' : 'text-gray-800'}`
                     }
                   >
                     Login
@@ -251,7 +233,7 @@ const Header = ({ categories }) => {
                     to="/register" 
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
+                      `block py-2 px-3 hover:bg-green-100 rounded-md ${isActive ? 'text-green-700 bg-green-100' : 'text-gray-800'}`
                     }
                   >
                     Đăng ký
@@ -268,7 +250,7 @@ const Header = ({ categories }) => {
                     to={`/detail?category=${category.name}`}
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) => 
-                      `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
+                      `block py-2 px-3 hover:bg-green-100 rounded-md ${isActive ? 'text-green-700 bg-green-100' : 'text-gray-800'}`
                     }
                   >
                     {category.name}
@@ -284,7 +266,7 @@ const Header = ({ categories }) => {
                 to="/promotions" 
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) => 
-                  `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
+                  `block py-2 px-3 hover:bg-green-100 rounded-md ${isActive ? 'text-green-700 bg-green-100' : 'text-gray-800'}`
                 }
               >
                 Khuyến mãi
@@ -293,7 +275,7 @@ const Header = ({ categories }) => {
                 to="/news" 
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) => 
-                  `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
+                  `block py-2 px-3 hover:bg-green-100 rounded-md ${isActive ? 'text-green-700 bg-green-100' : 'text-gray-800'}`
                 }
               >
                 Tin tức
@@ -302,10 +284,19 @@ const Header = ({ categories }) => {
                 to="/contact" 
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) => 
-                  `block py-2 px-3 hover:bg-emerald-200 rounded-md ${isActive ? 'text-green-700 bg-emerald-200' : 'text-gray-800'}`
+                  `block py-2 px-3 hover:bg-green-100 rounded-md ${isActive ? 'text-green-700 bg-green-100' : 'text-gray-800'}`
                 }
               >
                 Liên hệ
+              </NavLink>
+              <NavLink 
+                to="/stores" 
+                onClick={() => setMobileMenuOpen(false)}
+                className={({ isActive }) => 
+                  `block py-2 px-3 hover:bg-green-100 rounded-md ${isActive ? 'text-green-700 bg-green-100' : 'text-gray-800'}`
+                }
+              >
+                Hệ thống cửa hàng
               </NavLink>
             </nav>
           </div>
@@ -313,7 +304,7 @@ const Header = ({ categories }) => {
       )}
 
       {/* Desktop Navigation */}
-      <nav className="bg-emerald-200 border-b border-green-200 hidden md:block">
+      <nav className="bg-green-100 border-b border-green-200 hidden md:block">
         <div className="container mx-auto px-4">
           <div className="flex items-center space-x-6 py-3">
             {categories && categories.length > 0 ? (
@@ -376,6 +367,17 @@ const Header = ({ categories }) => {
               }
             >
               Liên hệ
+            </NavLink>
+            
+            <NavLink 
+              to="/stores" 
+              className={({ isActive }) => 
+                `text-gray-800 hover:bg-blue-600 hover:text-white hover:scale-105 px-3 py-1 rounded-md transition-all duration-200 ${
+                  isActive ? 'text-green-700 font-semibold' : ''
+                }`
+              }
+            >
+              Hệ thống cửa hàng
             </NavLink>
           </div>
         </div>
