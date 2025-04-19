@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ChevronDown, ChevronUp, Filter } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import { AuthContext } from '../context/AuthContext';
 
 // Data mẫu
 const categoryData = {
@@ -10,18 +12,18 @@ const categoryData = {
   description: 'Khám phá các mẫu điện thoại mới nhất với công nghệ hiện đại',
   subcategories: ['iPhone', 'Samsung', 'Xiaomi', 'OPPO', 'Vivo', 'Realme', 'Nokia'],
   products: [
-    { id: 1, name: 'iPhone 15 Pro Max', price: '32.990.000đ', oldPrice: '34.990.000đ', image: '/api/placeholder/200/200', rating: 5, brand: 'Apple', features: ['6.7 inch', '8GB RAM', '512GB', 'iOS 17'], inStock: true },
-    { id: 2, name: 'Samsung Galaxy S24 Ultra', price: '28.990.000đ', oldPrice: '30.990.000đ', image: '/api/placeholder/200/200', rating: 4.5, brand: 'Samsung', features: ['6.8 inch', '12GB RAM', '256GB', 'Android 14'], inStock: true },
-    { id: 3, name: 'Xiaomi 14 Ultra', price: '24.990.000đ', oldPrice: '27.990.000đ', image: '/api/placeholder/200/200', rating: 4.5, brand: 'Xiaomi', features: ['6.7 inch', '12GB RAM', '256GB', 'Android 14'], inStock: true },
-    { id: 4, name: 'OPPO Find X7 Ultra', price: '21.990.000đ', oldPrice: '23.990.000đ', image: '/api/placeholder/200/200', rating: 4, brand: 'OPPO', features: ['6.8 inch', '12GB RAM', '256GB', 'Android 14'], inStock: false },
-    { id: 5, name: 'iPhone 15', price: '21.990.000đ', oldPrice: '22.990.000đ', image: '/api/placeholder/200/200', rating: 4.5, brand: 'Apple', features: ['6.1 inch', '6GB RAM', '128GB', 'iOS 17'], inStock: true },
-    { id: 6, name: 'Samsung Galaxy S24', price: '19.990.000đ', oldPrice: '20.990.000đ', image: '/api/placeholder/200/200', rating: 4, brand: 'Samsung', features: ['6.2 inch', '8GB RAM', '256GB', 'Android 14'], inStock: true },
-    { id: 7, name: 'Xiaomi 14', price: '16.990.000đ', oldPrice: '18.990.000đ', image: '/api/placeholder/200/200', rating: 4, brand: 'Xiaomi', features: ['6.36 inch', '8GB RAM', '256GB', 'Android 14'], inStock: true },
-    { id: 8, name: 'OPPO Reno 12 Pro', price: '14.990.000đ', oldPrice: '15.990.000đ', image: '/api/placeholder/200/200', rating: 3.5, brand: 'OPPO', features: ['6.7 inch', '8GB RAM', '256GB', 'Android 14'], inStock: true },
-    { id: 9, name: 'Vivo X100 Pro', price: '22.990.000đ', oldPrice: '24.990.000đ', image: '/api/placeholder/200/200', rating: 4, brand: 'Vivo', features: ['6.78 inch', '12GB RAM', '256GB', 'Android 14'], inStock: true },
-    { id: 10, name: 'iPhone 14 Pro Max', price: '26.990.000đ', oldPrice: '29.990.000đ', image: '/api/placeholder/200/200', rating: 4.5, brand: 'Apple', features: ['6.7 inch', '6GB RAM', '256GB', 'iOS 16'], inStock: false },
-    { id: 11, name: 'Realme GT 6', price: '15.990.000đ', oldPrice: '16.990.000đ', image: '/api/placeholder/200/200', rating: 4, brand: 'Realme', features: ['6.78 inch', '8GB RAM', '256GB', 'Android 14'], inStock: true },
-    { id: 12, name: 'Nokia X50', price: '9.990.000đ', oldPrice: '10.990.000đ', image: '/api/placeholder/200/200', rating: 3.5, brand: 'Nokia', features: ['6.5 inch', '6GB RAM', '128GB', 'Android 14'], inStock: true },
+    { id: 1, name: 'iPhone 15 Pro Max', price: '32.990.000đ', oldPrice: '34.990.000đ', image: '/api/placeholder/200/200', rating: 5, brand: 'Apple', features: ['6.7 inch', '8GB RAM', '512GB', 'iOS 17'], inStock: true, category: 'Điện thoại' },
+    { id: 2, name: 'Samsung Galaxy S24 Ultra', price: '28.990.000đ', oldPrice: '30.990.000đ', image: '/api/placeholder/200/200', rating: 4.5, brand: 'Samsung', features: ['6.8 inch', '12GB RAM', '256GB', 'Android 14'], inStock: true, category: 'Điện thoại' },
+    { id: 3, name: 'Xiaomi 14 Ultra', price: '24.990.000đ', oldPrice: '27.990.000đ', image: '/api/placeholder/200/200', rating: 4.5, brand: 'Xiaomi', features: ['6.7 inch', '12GB RAM', '256GB', 'Android 14'], inStock: true, category: 'Điện thoại' },
+    { id: 4, name: 'OPPO Find X7 Ultra', price: '21.990.000đ', oldPrice: '23.990.000đ', image: '/api/placeholder/200/200', rating: 4, brand: 'OPPO', features: ['6.8 inch', '12GB RAM', '256GB', 'Android 14'], inStock: false, category: 'Điện thoại' },
+    { id: 5, name: 'iPhone 15', price: '21.990.000đ', oldPrice: '22.990.000đ', image: '/api/placeholder/200/200', rating: 4.5, brand: 'Apple', features: ['6.1 inch', '6GB RAM', '128GB', 'iOS 17'], inStock: true, category: 'Điện thoại' },
+    { id: 6, name: 'Samsung Galaxy S24', price: '19.990.000đ', oldPrice: '20.990.000đ', image: '/api/placeholder/200/200', rating: 4, brand: 'Samsung', features: ['6.2 inch', '8GB RAM', '256GB', 'Android 14'], inStock: true, category: 'Điện thoại' },
+    { id: 7, name: 'Xiaomi 14', price: '16.990.000đ', oldPrice: '18.990.000đ', image: '/api/placeholder/200/200', rating: 4, brand: 'Xiaomi', features: ['6.36 inch', '8GB RAM', '256GB', 'Android 14'], inStock: true, category: 'Điện thoại' },
+    { id: 8, name: 'OPPO Reno 12 Pro', price: '14.990.000đ', oldPrice: '15.990.000đ', image: '/api/placeholder/200/200', rating: 3.5, brand: 'OPPO', features: ['6.7 inch', '8GB RAM', '256GB', 'Android 14'], inStock: true, category: 'Điện thoại' },
+    { id: 9, name: 'Vivo X100 Pro', price: '22.990.000đ', oldPrice: '24.990.000đ', image: '/api/placeholder/200/200', rating: 4, brand: 'Vivo', features: ['6.78 inch', '12GB RAM', '256GB', 'Android 14'], inStock: true, category: 'Điện thoại' },
+    { id: 10, name: 'iPhone 14 Pro Max', price: '26.990.000đ', oldPrice: '29.990.000đ', image: '/api/placeholder/200/200', rating: 4.5, brand: 'Apple', features: ['6.7 inch', '6GB RAM', '256GB', 'iOS 16'], inStock: false, category: 'Điện thoại' },
+    { id: 11, name: 'Realme GT 6', price: '15.990.000đ', oldPrice: '16.990.000đ', image: '/api/placeholder/200/200', rating: 4, brand: 'Realme', features: ['6.78 inch', '8GB RAM', '256GB', 'Android 14'], inStock: true, category: 'Điện thoại' },
+    { id: 12, name: 'Nokia X50', price: '9.990.000đ', oldPrice: '10.990.000đ', image: '/api/placeholder/200/200', rating: 3.5, brand: 'Nokia', features: ['6.5 inch', '6GB RAM', '128GB', 'Android 14'], inStock: true, category: 'Điện thoại' },
   ],
   priceRanges: [
     { id: 1, name: 'Dưới 5 triệu', min: 0, max: 5000000 },
@@ -48,7 +50,9 @@ const categories = [
 
 export default function CategoryPage() {
   // State
-  // eslint-disable-next-line no-unused-vars
+  const { isLoggedIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [sortOption, setSortOption] = useState('featured');
   const [viewMode, setViewMode] = useState('grid');
@@ -57,13 +61,100 @@ export default function CategoryPage() {
   const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState({});
+  const [selectedCategories, setSelectedCategories] = useState([]); // Thêm state cho danh mục
   const [inStockOnly, setInStockOnly] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState(categoryData.products);
   const [openFilterSection, setOpenFilterSection] = useState({
+    category: true, // Thêm state cho gập/mở danh mục
     price: true,
     brand: true,
     features: {}
   });
+
+  // Xử lý thêm vào giỏ hàng
+  const handleAddToCart = (product) => {
+    if (!isLoggedIn) {
+      navigate('/login');
+      return;
+    }
+    alert(`Đã thêm ${product.name} vào giỏ hàng!`);
+  };
+
+  // Lấy query parameter 'search' và lọc sản phẩm
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const searchQuery = params.get('search')?.toLowerCase() || '';
+    
+    let result = [...categoryData.products];
+
+    // Lọc theo từ khóa tìm kiếm
+    if (searchQuery) {
+      result = result.filter(product => 
+        product.name.toLowerCase().includes(searchQuery)
+      );
+    }
+
+    // Lọc theo danh mục
+    if (selectedCategories.length > 0) {
+      result = result.filter(product => 
+        selectedCategories.includes(product.category)
+      );
+    }
+
+    // Lọc theo còn hàng
+    if (inStockOnly) {
+      result = result.filter(product => product.inStock);
+    }
+
+    // Lọc theo giá
+    if (selectedPriceRanges.length > 0) {
+      result = result.filter(product => {
+        const productPrice = parseInt(product.price.replace(/\./g, '').replace('đ', ''));
+        return selectedPriceRanges.some(rangeId => {
+          const range = categoryData.priceRanges.find(r => r.id === rangeId);
+          return productPrice >= range.min && productPrice <= range.max;
+        });
+      });
+    }
+
+    // Lọc theo thương hiệu
+    if (selectedBrands.length > 0) {
+      result = result.filter(product => selectedBrands.includes(product.brand));
+    }
+
+    // Lọc theo tính năng
+    Object.entries(selectedFeatures).forEach(([featureId, selectedOptions]) => {
+      if (selectedOptions.length > 0) {
+        result = result.filter(product => {
+          return product.features.some(feat => selectedOptions.includes(feat));
+        });
+      }
+    });
+
+    // Sắp xếp
+    switch (sortOption) {
+      case 'price-asc':
+        result.sort((a, b) => parseInt(a.price.replace(/\./g, '').replace('đ', '')) - parseInt(b.price.replace(/\./g, '').replace('đ', '')));
+        break;
+      case 'price-desc':
+        result.sort((a, b) => parseInt(b.price.replace(/\./g, '').replace('đ', '')) - parseInt(a.price.replace(/\./g, '').replace('đ', '')));
+        break;
+      case 'name-asc':
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'name-desc':
+        result.sort((a, b) => b.name.localeCompare(b.name));
+        break;
+      case 'rating':
+        result.sort((a, b) => b.rating - a.rating);
+        break;
+      default:
+        break;
+    }
+
+    setFilteredProducts(result);
+    setCurrentPage(1);
+  }, [location.search, selectedCategories, selectedPriceRanges, selectedBrands, selectedFeatures, inStockOnly, sortOption]);
 
   // Khởi tạo state cho features filter
   useEffect(() => {
@@ -76,60 +167,6 @@ export default function CategoryPage() {
       features: initialFeatures
     }));
   }, []);
-
-  // Lọc và sắp xếp sản phẩm
-  useEffect(() => {
-    let result = [...categoryData.products];
-
-    if (inStockOnly) {
-      result = result.filter(product => product.inStock);
-    }
-
-    if (selectedPriceRanges.length > 0) {
-      result = result.filter(product => {
-        const productPrice = parseInt(product.price.replace(/\./g, '').replace('đ', ''));
-        return selectedPriceRanges.some(rangeId => {
-          const range = categoryData.priceRanges.find(r => r.id === rangeId);
-          return productPrice >= range.min && productPrice <= range.max;
-        });
-      });
-    }
-
-    if (selectedBrands.length > 0) {
-      result = result.filter(product => selectedBrands.includes(product.brand));
-    }
-
-    Object.entries(selectedFeatures).forEach(([featureId, selectedOptions]) => {
-      if (selectedOptions.length > 0) {
-        result = result.filter(product => {
-          return product.features.some(feat => selectedOptions.includes(feat));
-        });
-      }
-    });
-
-    switch (sortOption) {
-      case 'price-asc':
-        result.sort((a, b) => parseInt(a.price.replace(/\./g, '').replace('đ', '')) - parseInt(b.price.replace(/\./g, '').replace('đ', '')));
-        break;
-      case 'price-desc':
-        result.sort((a, b) => parseInt(b.price.replace(/\./g, '').replace('đ', '')) - parseInt(a.price.replace(/\./g, '').replace('đ', '')));
-        break;
-      case 'name-asc':
-        result.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'name-desc':
-        result.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      case 'rating':
-        result.sort((a, b) => b.rating - a.rating);
-        break;
-      default:
-        break;
-    }
-
-    setFilteredProducts(result);
-    setCurrentPage(1);
-  }, [selectedPriceRanges, selectedBrands, selectedFeatures, inStockOnly, sortOption]);
 
   // Phân trang
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -154,6 +191,14 @@ export default function CategoryPage() {
         [featureId]: !prev.features[featureId]
       }
     }));
+  };
+
+  const handleCategoryChange = (categoryName) => {
+    setSelectedCategories(prev => 
+      prev.includes(categoryName)
+        ? prev.filter(c => c !== categoryName)
+        : [...prev, categoryName]
+    );
   };
 
   const handlePriceChange = (priceRangeId) => {
@@ -187,13 +232,14 @@ export default function CategoryPage() {
   const handleInStockChange = () => setInStockOnly(prev => !prev);
 
   const clearAllFilters = () => {
+    setSelectedCategories([]);
     setSelectedPriceRanges([]);
     setSelectedBrands([]);
     setSelectedFeatures({});
     setInStockOnly(false);
   };
 
-  const activeFilterCount = selectedPriceRanges.length + selectedBrands.length + 
+  const activeFilterCount = selectedCategories.length + selectedPriceRanges.length + selectedBrands.length + 
     Object.values(selectedFeatures).reduce((acc, curr) => acc + curr.length, 0) + 
     (inStockOnly ? 1 : 0);
 
@@ -214,7 +260,7 @@ export default function CategoryPage() {
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center text-sm">
-            <a href="/" className="text-gray-500 hover:text-blue-600">Trang chủ</a>
+            <Link to="/" className="text-gray-500 hover:text-blue-600">Trang chủ</Link>
             <span className="mx-2 text-gray-400">/</span>
             <span className="text-gray-700 font-medium">{categoryData.name}</span>
           </div>
@@ -236,6 +282,28 @@ export default function CategoryPage() {
                   <input type="checkbox" id="inStock" checked={inStockOnly} onChange={handleInStockChange} className="h-4 w-4 text-blue-600 rounded" />
                   <label htmlFor="inStock" className="ml-2 text-gray-700">Còn hàng</label>
                 </div>
+              </div>
+              <div className="border-t pt-4">
+                <div className="flex justify-between items-center cursor-pointer mb-2" onClick={() => toggleFilterSection('category')}>
+                  <h3 className="font-medium">Danh mục sản phẩm</h3>
+                  {openFilterSection.category ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </div>
+                {openFilterSection.category && (
+                  <div className="space-y-2 mt-2 ml-1">
+                    {categories.map(category => (
+                      <div key={category.id} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={`category-${category.id}`}
+                          checked={selectedCategories.includes(category.name)}
+                          onChange={() => handleCategoryChange(category.name)}
+                          className="h-4 w-4 text-blue-600 rounded"
+                        />
+                        <label htmlFor={`category-${category.id}`} className="ml-2 text-gray-700">{category.name}</label>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="border-t pt-4">
                 <div className="flex justify-between items-center cursor-pointer mb-2" onClick={() => toggleFilterSection('price')}>
@@ -335,7 +403,7 @@ export default function CategoryPage() {
             </div>
             {filteredProducts.length === 0 ? (
               <div className="text-center py-10">
-                <p className="text-gray-600">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
+                <p className="text-gray-600">Không tìm thấy sản phẩm nào phù hợp.</p>
               </div>
             ) : (
               <div className={viewMode === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" : "space-y-4"}>
@@ -363,7 +431,12 @@ export default function CategoryPage() {
                           {product.inStock ? 'Còn hàng' : 'Hết hàng'}
                         </span>
                       </div>
-                      <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Thêm vào giỏ</button>
+                      <button 
+                        onClick={() => handleAddToCart(product)}
+                        className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
+                      >
+                        Thêm vào giỏ
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -383,6 +456,105 @@ export default function CategoryPage() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Filters */}
+      {mobileFiltersOpen && (
+        <div className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden" onClick={() => setMobileFiltersOpen(false)}>
+          <div className="fixed inset-y-0 left-0 w-3/4 max-w-sm bg-white p-4 overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="font-bold text-lg">Bộ lọc sản phẩm</h2>
+              <button onClick={() => setMobileFiltersOpen(false)} className="text-gray-600">Đóng</button>
+            </div>
+            <div className="mb-4">
+              <button onClick={clearAllFilters} className="text-blue-600 text-sm font-medium hover:underline">Xóa tất cả bộ lọc</button>
+            </div>
+            <div className="border-t pt-4">
+              <div className="flex items-center mb-2">
+                <input type="checkbox" id="inStock-mobile" checked={inStockOnly} onChange={handleInStockChange} className="h-4 w-4 text-blue-600 rounded" />
+                <label htmlFor="inStock-mobile" className="ml-2 text-gray-700">Còn hàng</label>
+              </div>
+            </div>
+            <div className="border-t pt-4">
+              <div className="flex justify-between items-center cursor-pointer mb-2" onClick={() => toggleFilterSection('category')}>
+                <h3 className="font-medium">Danh mục sản phẩm</h3>
+                {openFilterSection.category ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </div>
+              {openFilterSection.category && (
+                <div className="space-y-2 mt-2 ml-1">
+                  {categories.map(category => (
+                    <div key={category.id} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id={`category-mobile-${category.id}`}
+                        checked={selectedCategories.includes(category.name)}
+                        onChange={() => handleCategoryChange(category.name)}
+                        className="h-4 w-4 text-blue-600 rounded"
+                      />
+                      <label htmlFor={`category-mobile-${category.id}`} className="ml-2 text-gray-700">{category.name}</label>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="border-t pt-4">
+              <div className="flex justify-between items-center cursor-pointer mb-2" onClick={() => toggleFilterSection('price')}>
+                <h3 className="font-medium">Giá</h3>
+                {openFilterSection.price ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </div>
+              {openFilterSection.price && (
+                <div className="space-y-2 mt-2 ml-1">
+                  {categoryData.priceRanges.map(range => (
+                    <div key={range.id} className="flex items-center">
+                      <input type="checkbox" id={`price-mobile-${range.id}`} checked={selectedPriceRanges.includes(range.id)} onChange={() => handlePriceChange(range.id)} className="h-4 w-4 text-blue-600 rounded" />
+                      <label htmlFor={`price-mobile-${range.id}`} className="ml-2 text-gray-700">{range.name}</label>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="border-t pt-4">
+              <div className="flex justify-between items-center cursor-pointer mb-2" onClick={() => toggleFilterSection('brand')}>
+                <h3 className="font-medium">Thương hiệu</h3>
+                {openFilterSection.brand ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </div>
+              {openFilterSection.brand && (
+                <div className="space-y-2 mt-2 ml-1">
+                  {categoryData.brands.map(brand => (
+                    <div key={brand} className="flex items-center">
+                      <input type="checkbox" id={`brand-mobile-${brand}`} checked={selectedBrands.includes(brand)} onChange={() => handleBrandChange(brand)} className="h-4 w-4 text-blue-600 rounded" />
+                      <label htmlFor={`brand-mobile-${brand}`} className="ml-2 text-gray-700">{brand}</label>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {categoryData.features.map(feature => (
+              <div key={feature.id} className="border-t pt-4">
+                <div className="flex justify-between items-center cursor-pointer mb-2" onClick={() => toggleFeatureSection(feature.id)}>
+                  <h3 className="font-medium">{feature.name}</h3>
+                  {openFilterSection.features[feature.id] ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </div>
+                {openFilterSection.features[feature.id] && (
+                  <div className="space-y-2 mt-2 ml-1">
+                    {feature.options.map((option, idx) => (
+                      <div key={idx} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={`feature-mobile-${feature.id}-${idx}`}
+                          checked={selectedFeatures[feature.id]?.includes(option) || false}
+                          onChange={() => handleFeatureChange(feature.id, option)}
+                          className="h-4 w-4 text-blue-600 rounded"
+                        />
+                        <label htmlFor={`feature-mobile-${feature.id}-${idx}`} className="ml-2 text-gray-700">{option}</label>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <Footer categories={categories} />
     </div>
